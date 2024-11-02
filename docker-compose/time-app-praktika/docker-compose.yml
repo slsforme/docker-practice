@@ -1,0 +1,40 @@
+
+services:
+  mysql:
+    container_name: mysql
+    hostname: mysql
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: time_db
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - website
+
+  backend:
+    build: # add image
+      context: ./api
+      dockerfile: Dockerfile
+    ports: 
+      - "5000:5000"
+    networks:
+      - website
+  frontend:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:  # add image
+      - "8888:8888"
+    depends_on:
+      - backend
+    networks:
+      - website
+    
+networks:
+  website: 
+
+
+
